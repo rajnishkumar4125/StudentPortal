@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Student Portal{% endblock %}
+
+{% block content %}
+<div class="jumbotron bg-light p-5 rounded shadow-sm">
+    <h1 class="display-4">Welcome to Student Portal</h1>
+    <p class="lead">Manage student information efficiently</p>
+    <hr class="my-4">
+    <p>This portal allows you to manage, view, and organize student records.</p>
+    <div class="mt-4">
+        <a class="btn btn-primary btn-lg me-2" href="{% url 'student_list' %}" role="button">View Students</a>
+        <a class="btn btn-success btn-lg" href="{% url 'student_create' %}" role="button">Add New Student</a>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-6 mb-4">
+        <div class="card bg-primary text-white shadow h-100">
+            <div class="card-body text-center d-flex flex-column justify-content-center">
+                <h5 class="card-title">👥 Total Students</h5>
+                <h1 class="display-2 fw-bold">{{ total_students }}</h1>
+                <p class="mb-0">Registered in Portal</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card bg-success text-white shadow h-100">
+            <div class="card-body text-center d-flex flex-column justify-content-center">
+                <h5 class="card-title">📊 Average CGPA</h5>
+                <h1 class="display-2 fw-bold">{{ avg_cgpa }}</h1>
+                <p class="mb-0">Overall Performance</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow mt-2">
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">🏫 Department-wise Strength</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Department</th>
+                        <th class="text-center">Student Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in dept_counts %}
+                    <tr>
+                        <td><strong>{{ item.department }}</strong></td>
+                        <td class="text-center"><span class="badge bg-info text-dark px-3">{{ item.total }}</span></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="2" class="text-center">No department data available yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
