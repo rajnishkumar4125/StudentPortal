@@ -10,4 +10,5 @@ urlpatterns = [
     path('students/<int:pk>/delete/', views.StudentDeleteView.as_view(), name='student_delete'),
     path('export/excel/', views.export_students_excel, name='export_excel'),
     path('export/pdf/', views.export_students_pdf, name='export_pdf'),
+    path('dashboard/', views.dashboard, name='dashboard'),
 ]

@@ -120,3 +120,20 @@ def export_students_pdf(request):
         
     response.write(pdf.output())
     return response
+
+from django.db.models import Avg, Count
+from django.shortcuts import render
+from .models import Student
+
+def dashboard(request):
+    # This gathers the data for your cards
+    total_students = Student.objects.count()
+    avg_cgpa = Student.objects.aggregate(Avg('cgpa'))['cgpa__avg'] or 0
+    dept_counts = Student.objects.values('department').annotate(count=Count('id'))
+    
+    context = {
+        'total_students': total_students,
+        'avg_cgpa': round(avg_cgpa, 2),
+        'dept_counts': dept_counts,
+    }
+    return render(request, 'students/dashboard.html', context)

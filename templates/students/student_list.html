@@ -47,13 +47,13 @@
         <tbody>
             {% for student in students %}
             <tr>
-                <td>
-            {% if student.profile_pic %}
-                <img src="{{ student.profile_pic.url }}" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover;">
-            {% else %}
-                <div style="width: 45px; height: 45px; border-radius: 50%; background: #ddd; display: inline-block;"></div>
-            {% endif %}
-        </td>
+               <td>
+                     {% if student.profile_pic %}
+                    <img src="{{ student.profile_pic.url }}" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid #ddd;">
+                    {% else %}
+                    <div style="width: 45px; height: 45px; border-radius: 50%; background-color: #e9ecef; display: inline-block;"></div>
+                     {% endif %}
+              </td>
                 <td><strong>{{ student.roll_number }}</strong></td>
                 <td>{{ student.user }}</td>
                 <td>{{ student.department }}</td>
