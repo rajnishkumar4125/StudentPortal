@@ -3,71 +3,149 @@
 {% block title %}{% if form.instance.pk %}Edit{% else %}Create{% endif %} Student - Student Portal{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <h1 class="mb-4">{% if form.instance.pk %}Edit Student{% else %}Create New Student{% endif %}</h1>
+<div class="row justify-content-center mb-4">
+    <div class="col-lg-8">
+        <div class="page-header">
+            <h1>
+                <i class="bi bi-person-plus me-2"></i>
+                {% if form.instance.pk %}Edit Student{% else %}Create New Student{% endif %}
+            </h1>
+        </div>
+    </div>
+</div>
 
-        <form method="post" class="needs-validation" enctype="multipart/form-data" novalidate>
-            {% csrf_token %}
-            
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Student Information</h5>
-                </div>
-                <div class="card-body">
-                    {% for field in form %}
-                        <div class="mb-3">
-                            {{ field.label_tag }}
-                            
-                            {% if field.field.widget.input_type == 'select' %}
-                                {{ field }}
-                            {% elif field.field.widget.input_type == 'textarea' %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow">
+            <div class="card-header d-flex align-items-center">
+                <i class="bi bi-info-circle me-2"></i>
+                <h5 class="mb-0">Student Information</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data" novalidate>
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        {% for field in form %}
+                            {% if field.field.widget.input_type == 'file' %}
+                                <div class="col-md-12 mb-4">
+                                    <div class="form-group">
+                                        {{ field.label_tag }}
+                                        <div class="input-group">
+                                            <input type="file" class="form-control" name="{{ field.name }}" id="{{ field.id_for_label }}" accept="image/*">
+                                        </div>
+                                        {% if field.errors %}
+                                            <div class="invalid-feedback d-block mt-2">
+                                                {% for error in field.errors %}
+                                                    <i class="bi bi-exclamation-circle me-1"></i>{{ error }}
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% elif field.field.widget.input_type == 'hidden' %}
                                 {{ field }}
                             {% else %}
-                                {{ field }}
+                                <div class="col-md-{% if field.name in 'user' %}12{% else %}6{% endif %} mb-3">
+                                    <div class="form-group">
+                                        {{ field.label_tag }}
+                                        
+                                        {% if field.field.widget.input_type == 'select' %}
+                                            {{ field }}
+                                        {% elif field.field.widget.input_type == 'textarea' %}
+                                            {{ field }}
+                                        {% else %}
+                                            {{ field }}
+                                        {% endif %}
+                                        
+                                        {% if field.errors %}
+                                            <div class="invalid-feedback d-block mt-2">
+                                                {% for error in field.errors %}
+                                                    <i class="bi bi-exclamation-circle me-1"></i>{{ error }}
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                        
+                                        {% if field.help_text %}
+                                            <small class="form-text text-muted d-block mt-2">
+                                                <i class="bi bi-info-circle me-1"></i>{{ field.help_text|safe }}
+                                            </small>
+                                        {% endif %}
+                                    </div>
+                                </div>
                             {% endif %}
-                            
-                            {% if field.errors %}
-                            <div class="invalid-feedback d-block">
-                                {% for error in field.errors %}
-                                    <p>{{ error }}</p>
-                                {% endfor %}
-                            </div>
-                            {% endif %}
-                            
-                            {% if field.help_text %}
-                            <small class="form-text text-muted">{{ field.help_text|safe }}</small>
-                            {% endif %}
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
+                        {% endfor %}
+                    </div>
 
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <a href="{% url 'student_list' %}" class="btn btn-secondary">Cancel</a>
-                <button type="submit" class="btn btn-primary">
-                    {% if form.instance.pk %}Update{% else %}Create{% endif %} Student
-                </button>
+                    <hr class="my-4">
+
+                    <div class="d-flex gap-2 justify-content-end">
+                        <a href="{% url 'student_list' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle me-2"></i>Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle me-2"></i>
+                            {% if form.instance.pk %}Update{% else %}Create{% endif %} Student
+                        </button>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 
 <style>
-    form {
-        max-width: 100%;
+    form .form-group {
+        display: flex;
+        flex-direction: column;
     }
-    .form-control, .form-select {
-        padding: 0.75rem;
+
+    form .form-label {
+        font-weight: 600;
+        color: #0f172a;
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+    }
+
+    form .form-control, 
+    form .form-select {
+        border: 1.5px solid #e2e8f0;
         border-radius: 0.5rem;
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        background-color: #ffffff;
     }
-    .form-control:focus, .form-select:focus {
-        border-color: #0d6efd;
-        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+
+    form .form-control:focus, 
+    form .form-select:focus {
+        border-color: #0ea5e9;
+        box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+        background-color: #ffffff;
     }
-    textarea {
+
+    textarea.form-control {
         resize: vertical;
-        min-height: 100px;
+        min-height: 120px;
+    }
+
+    .input-group {
+        position: relative;
+    }
+
+    .input-group input[type="file"] {
+        padding: 0.75rem 1rem;
+    }
+
+    .invalid-feedback {
+        color: #ef4444;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    hr {
+        border-top: 1px solid #e2e8f0;
     }
 </style>
+
 {% endblock %}

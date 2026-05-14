@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Student(models.Model):
     GRADE_CHOICES = [
         ('A', 'Grade A'),
@@ -10,7 +11,7 @@ class Student(models.Model):
         ('F', 'Grade F'),
     ]
     
-    user = models.CharField(max_length=100)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='student_profile')
     roll_number = models.CharField(max_length=20, unique=True)
     department = models.CharField(max_length=100)
     semester = models.IntegerField()
